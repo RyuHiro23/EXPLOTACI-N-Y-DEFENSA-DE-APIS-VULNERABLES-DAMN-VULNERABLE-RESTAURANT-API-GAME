@@ -9,6 +9,43 @@ A través de distintos niveles, se identifican y mitigan fallos comunes en servi
 
 El objetivo principal es comprender cómo se originan vulnerabilidades reales en APIs modernas *como la falta de control de acceso, errores de autorización, escalamiento de privilegios o solicitudes inseguras al servidor* y demostrar, mediante código corregido, las medidas necesarias para prevenirlas en entornos de producción.
 
+## Entorno de ejecución
+Este proyecto fue desarrollado y ejecutado dentro de una máquina virtual Kali Linux, utilizando Docker para desplegar la API vulnerable Damn Vulnerable RESTaurant y sus servicios asociados.
+
+### Requisitos
+- Kali Linux (máquina virtual)
+- Docker Engine
+- Docker Compose
+- Python 3 (solo para inspección del código)
+- Burp Suite Community Edition
+- Visual Studio Code
+
+## Iniciar el entorno
+Ejecutar en la terminal dentro del directorio del proyecto:
+```bash
+docker-compose build
+docker-compose up -d
+```
+Verificar los contenedores:
+```bash
+docker ps
+```
+La API estará disponible en:
+```bash
+http://localhost:8091
+```
+Documentación automática de FastAPI:
+```bash
+http://localhost:8091/docs
+```
+## Herramientas utilizadas
+- Burp Suite: interceptación y explotación de endpoints
+- cURL: pruebas rápidas desde la terminal
+- VS Code: modificación del código fuente y aplicación de parches
+- Git: versionado y repositorio del proyecto
+
+Con este entorno se ejecutaron todas las pruebas, explotaciones y validaciones documentadas en este repositorio.
+
 ## Vulnerabilidades 
 
 ## Level 1 – Unrestricted Menu Item Deletion
