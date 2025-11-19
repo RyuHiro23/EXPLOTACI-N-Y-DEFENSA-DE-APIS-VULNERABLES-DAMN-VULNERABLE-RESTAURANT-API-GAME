@@ -13,10 +13,10 @@ El objetivo principal es comprender cómo se originan vulnerabilidades reales en
 Este proyecto fue desarrollado y ejecutado dentro de una máquina virtual Kali Linux, utilizando Docker para desplegar la API vulnerable Damn Vulnerable RESTaurant y sus servicios asociados.
 
 ### Requisitos
-- Kali Linux (máquina virtual)
+- Kali Linux 
 - Docker Engine
 - Docker Compose
-- Python 3 (solo para inspección del código)
+- Python 3 
 - Burp Suite Community Edition
 - Visual Studio Code
 
