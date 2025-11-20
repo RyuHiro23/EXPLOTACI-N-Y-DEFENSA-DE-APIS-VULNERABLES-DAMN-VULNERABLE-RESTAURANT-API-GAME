@@ -4,10 +4,9 @@
 
 #### Universidad Cooperativa de Colombia 
 
-Este proyecto tiene como propósito analizar, explotar y corregir vulnerabilidades presentes en una API intencionalmente insegura, basada en el laboratorio Damn Vulnerable RESTaurant.
-A través de distintos niveles, se identifican y mitigan fallos comunes en servicios REST, aplicando prácticas seguras de desarrollo y referencia directa a las categorías de OWASP API Security Top 10 (2023).
+Este proyecto analiza, explota y corrige vulnerabilidades presentes en una API intencionalmente insegura, basada en el laboratorio Damn Vulnerable RESTaurant. A través de distintos niveles, se identifican y mitigan fallos comunes en servicios REST, aplicando prácticas seguras de desarrollo y referencia directa a las categorías de OWASP API Security Top 10 (2023).
 
-El objetivo principal es comprender cómo se originan vulnerabilidades reales en APIs modernas *como la falta de control de acceso, errores de autorización, escalamiento de privilegios o solicitudes inseguras al servidor* y demostrar, mediante código corregido, las medidas necesarias para prevenirlas en entornos de producción.
+El objetivo es comprender cómo se originan vulnerabilidades reales en APIs modernas y demostrar, mediante código corregido, las medidas necesarias para prevenirlas en entornos de producción.
 
 ## Entorno de ejecución
 Este proyecto fue desarrollado y ejecutado dentro de una máquina virtual Kali Linux, utilizando Docker para desplegar la API vulnerable Damn Vulnerable RESTaurant y sus servicios asociados.
@@ -51,6 +50,7 @@ Con este entorno se ejecutaron todas las pruebas, explotaciones y validaciones d
 ## Level 1 – Unrestricted Menu Item Deletion
 ### Vulnerabilidad
 El endpoint `DELETE /menu/{item_id}` no aplicaba controles de autorización, permitiendo que cualquier usuario eliminara elementos del menú. Clasificada como *OWASP API5:2023 – Broken Function Level Authorization*, esta falla comprometía la integridad y disponibilidad de los datos.
+
 <img width="795" height="564" alt="image" src="https://github.com/user-attachments/assets/43f6801f-024d-4996-95b8-74485133ed57" />
 
 ### Código antiguo
@@ -66,6 +66,7 @@ def delete_menu_item(
 ```
 ### Explotación
 Un usuario sin privilegios podía enviar una solicitud DELETE y eliminar ítems, demostrando la ausencia de validación por rol.
+
 <img width="784" height="510" alt="image" src="https://github.com/user-attachments/assets/81290355-f28a-45bb-a43b-a946f5192598" />
 <img width="836" height="413" alt="image" src="https://github.com/user-attachments/assets/46c9a43c-f646-47d9-b4d2-f89428d88b62" />
 
@@ -107,6 +108,7 @@ def update_profile(user: UserUpdate, current_user, db):
 
 ### Explotación
 Un usuario podía cambiar datos de otra cuenta simplemente modificando el campo `username` en la petición.
+
 <img width="709" height="752" alt="image" src="https://github.com/user-attachments/assets/754f70bf-dac6-430b-a9d7-77b93ddd6d3f" />
 
 ### Código corregido
@@ -144,6 +146,7 @@ async def update_user_role(user, current_user, db):
 
 ### Explotación 
 Un usuario CUSTOMER pudo cambiar su rol a CHEF mediante una simple petición PUT, obteniendo permisos elevados.
+
 <img width="767" height="472" alt="image" src="https://github.com/user-attachments/assets/fb1a4f1a-cd44-48f1-85fd-6e721251f173" />
 
 ### Código corregido
@@ -177,6 +180,7 @@ def _image_url_to_base64(image_url):
 
 ### Explotación
 Al enviar un `image_url` con destino interno (`http://localhost:8091/...`), el servidor realizaba la solicitud, exponiendo datos internos.
+
 <img width="775" height="242" alt="image" src="https://github.com/user-attachments/assets/e399d480-f0cb-4255-a5af-eea23260f033" />
 <img width="775" height="244" alt="image" src="https://github.com/user-attachments/assets/539c6475-c6f7-44f6-93c5-581a2596bc16" />
 
@@ -197,4 +201,20 @@ Se añadieron filtros de protocolo, dominios permitidos y detección de IPs priv
 Se repitió la misma petición (mismo token EMPLOYEE y misma image_url local). El servidor rechazó la solicitud con 400 Bad Request o 403 y detalle indicando validación de URL (o Invalid content type), y no se descargó el recurso interno.
 
 <img width="975" height="342" alt="image" src="https://github.com/user-attachments/assets/2f02a4d0-404b-4c63-a03d-b25311d16c88" />
+
+# Resultados
+A través de este proyecto se logró:
+
+- Identificar y explotar 4 vulnerabilidades críticas (BOLA, SSRF, escalamiento de privilegios, falta de autorización)
+- Implementar correcciones efectivas basadas en OWASP API Security Top 10
+- Validar que las mitigaciones previenen los ataques documentados
+- Comprender la importancia de controles de autorización, validación de entradas y principio de mínimo privilegio
+
+# Referencias
+- sergiolubo/python_jwt_example_op. (n.d.). GitHub. https://github.com/sergiolubo/python_jwt_example_op
+- theowni/Damn-Vulnerable-RESTaurant-API-Game: Damn Vulnerable Restaurant is an intentionally vulnerable Web API game for learning and training purposes dedicated to developers, ethical hackers and security engineers. (n.d.). GitHub. https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game 
+- Damn-Vulnerable-RESTaurant-API-Game/walkthrough/Damn-Vulnerable-RESTaurant-API-Game CTF Web Applic f4cc903ddcbf49cb93a7ebe710af7837.md at main · GangGreenTemperTatum/Damn-Vulnerable-RESTaurant-API-Game. (n.d.). GitHub. https://github.com/GangGreenTemperTatum/Damn-Vulnerable-RESTaurant-API-Game/blob/main/walkthrough/Damn-Vulnerable-RESTaurant-API-Game%20CTF%20Web%20Applic%20f4cc903ddcbf49cb93a7ebe710af7837.md 
+- DV-RESTaurant-API-Game-Solution/README.md at main · turbra/DV-RESTaurant-API-Game-Solution. (n.d.). GitHub. https://github.com/turbra/DV-RESTaurant-API-Game-Solution/blob/main/README.md  
+- Damn-Vulnerable-RESTaurant-API-Game/vulnerability-fixes.md at main · FedeLu01/Damn-Vulnerable-RESTaurant-API-Game. (n.d.). GitHub. https://github.com/FedeLu01/Damn-Vulnerable-RESTaurant-API-Game/blob/main/vulnerability-fixes.md 	
+- Team, O. a. S. P. (n.d.). OWASP Top 10 API Security Risks – 2023 - OWASP API Security Top 10. https://owasp.org/API-Security/editions/2023/en/0x11-t10/ 
 
