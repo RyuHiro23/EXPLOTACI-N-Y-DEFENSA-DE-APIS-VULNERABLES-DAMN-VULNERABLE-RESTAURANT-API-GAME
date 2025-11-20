@@ -40,4 +40,3 @@ def update_profile(
     db.refresh(db_user)
 
     return db_user
-
